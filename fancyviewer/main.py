@@ -16,7 +16,7 @@ class FancyViewer:
         self.board_states = board_states
         self.window = Window(board_size, square_size=window_size // self.board_size)        
 
-    def play(self, delay=0.5, keep_history=False):
+    def play(self, delay=0.5):
         for state_index in range(len(self.board_states)):
             self.clear()
             self.view(state_index)
@@ -24,7 +24,7 @@ class FancyViewer:
 
         self.view(-1)
 
-    def play_synchronized(self, poison_pill, delay=0.5, keep_history=False):
+    def play_synchronized(self, poison_pill, delay=0.5):
         print('')
         
         state_index = 0
