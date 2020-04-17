@@ -17,26 +17,54 @@ class FancyViewer:
         self.window = Window(board_size, square_size=window_size // self.board_size)        
 
     def play(self, delay=0.5):
+        run_time = 0
+        last_time = datetime.datetime.now().timestamp()
         for state_index in range(len(self.board_states)):
+            while run_time < delay:
+                now = datetime.datetime.now().timestamp()
+                run_time += now - last_time
+                last_time = now
+                self.window.master.update() # Handle any events that occur
+                time.sleep(0.01)
+            
+            run_time %= delay
+
             self.clear()
             self.view(state_index)
-            time.sleep(delay)
-
-        self.view(-1)
+        
+        while True:
+            try:
+                self.window.master.update()
+            except:
+                break
+            time.sleep(0.01)
 
     def play_synchronized(self, poison_pill, delay=0.5):
         print('')
         
         state_index = 0
+        run_time = 0
         last_time = datetime.datetime.now().timestamp()
         while state_index < len(self.board_states) or not poison_pill.is_set():
-            while len(self.board_states) <= state_index or datetime.datetime.now().timestamp() - last_time < delay:
-                time.sleep(0.1)
+            while len(self.board_states) <= state_index or runtime < delay:
+                now = datetime.datetime.now().timestamp()
+                run_time += now - last_time
+                last_time = now
+                self.window.master.update() # Handle any events that occur
+                time.sleep(0.01)
+
+            run_time %= delay
 
             self.clear()
             self.view(state_index)
-            last_time = datetime.datetime.now().timestamp()
             state_index += 1
+
+        while True:
+            try:
+                self.window.master.update()
+            except:
+                break
+            time.sleep(0.01)
           
     def clear(self):
         self.window.clear()
