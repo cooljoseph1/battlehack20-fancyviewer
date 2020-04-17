@@ -6,8 +6,8 @@ This is a fancy viewer for the Battlehack20 game.
 Read more at the Battlehack website: https://bh2020.battlecode.org.
 """
 
-setup(name='fancyviewer',
-      version="1.0.0",
+setup(name='battlehack20-fancyviewer',
+      version="1.0.3",
       description='Battlehack 2020 fancy viewer.',
       author='cooljoseph',
       long_description=long_description,
@@ -25,5 +25,5 @@ setup(name='fancyviewer',
       ],
       python_requires='>=3, <3.8',
       zip_safe=False,
-      include_package_data=True,
+      include_package_data=True
 )

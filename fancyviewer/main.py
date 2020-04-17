@@ -11,17 +11,16 @@ Team = battlehack20.game.team.Team
 script_dir = os.path.dirname(__file__)
 
 class FancyViewer:
-    def __init__(self, board_size, board_states):        
+    def __init__(self, board_size, board_states, window_size=800):        
         self.board_size = board_size
         self.board_states = board_states
-        self.window = Window(board_size, square_size=30)        
+        self.window = Window(board_size, square_size=window_size // self.board_size)        
 
     def play(self, delay=0.5, keep_history=False):
         for state_index in range(len(self.board_states)):
+            self.clear()
             self.view(state_index)
             time.sleep(delay)
-            if not keep_history:
-                self.clear()
 
         self.view(-1)
 
@@ -33,8 +32,8 @@ class FancyViewer:
         while state_index < len(self.board_states) or not poison_pill.is_set():
             while len(self.board_states) <= state_index or datetime.datetime.now().timestamp() - last_time < delay:
                 time.sleep(0.1)
-            if not keep_history and state_index > 0:
-                self.clear()
+
+            self.clear()
             self.view(state_index)
             last_time = datetime.datetime.now().timestamp()
             state_index += 1
