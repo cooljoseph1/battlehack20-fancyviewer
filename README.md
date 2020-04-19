@@ -1,4 +1,6 @@
-This repository contains the code for the Battlehack20 fancyviewer.
+This repository contains the code for the Battlehack20 fancyviewer.  Before
+you can use this package, you must first have `battlehack20` or
+`battlehack20-minimal` installed.
 
 ## Installation and Usage
 
