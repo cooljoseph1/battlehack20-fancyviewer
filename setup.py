@@ -7,7 +7,7 @@ Read more at the Battlehack website: https://bh2020.battlecode.org.
 """
 
 setup(name='battlehack20-fancyviewer',
-      version="1.0.4",
+      version="1.0.5",
       description='Battlehack 2020 fancy viewer.',
       author='cooljoseph',
       long_description=long_description,

@@ -1,1 +1,1 @@
-from .main import *
+from .viewer import FancyViewer
