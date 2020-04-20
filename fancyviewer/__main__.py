@@ -29,7 +29,7 @@ def parse_board(board):
 
 def parse_logs(logs):
     board_states = logs.split("\n\n")
-    board_states = [parse_board(board) for board in board_states[1:-2]]
+    board_states = [parse_board(board) for board in board_states[2:-2]]
     return board_states
     
 
