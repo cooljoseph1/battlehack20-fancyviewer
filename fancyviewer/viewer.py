@@ -71,7 +71,7 @@ class FancyViewer(tkinter.Tk):
                     (x + 1) * self.square_size,
                     (y + 1) * self.square_size,
                     outline="",
-                    fill="brown1" if (x^y)&1 else "white"
+                    fill="#959595" if (x^y)&1 else "#ffffff"
                 ) for x in range(self.board_size)
             ] for y in range(self.board_size)
         ]
@@ -130,32 +130,58 @@ class FancyViewer(tkinter.Tk):
     
     def slow_down(self, _=None):
         self.speed_slider.set(self.speed_slider.get() - 5)
-                  
+
+    def clear_lines(self):
+        self.canvas.delete("line")
+    
     def clear(self):
+        self.clear_lines()
         self.canvas.delete("pawn")
         self.pawns = [[None for x in range(self.board_size)] for y in range(self.board_size)]
         self.old_board = [[None for x in range(self.board_size)] for y in range(self.board_size)]
+
+    def get_pos(self, x, y):
+         return x * self.square_size, (self.board_size - y) * self.square_size
+    
     def view(self):
         board = self.board_states[self.index]
-        
+
+        old_robot_positions = {robot.id: (x, y) for y, row in enumerate(self.old_board) for x, robot in enumerate(row) if robot}
+                
         for y in range(self.board_size):
             for x in range(self.board_size):
                 if board[y][x]:
-                    if self.old_board[y][x] and self.old_board[y][x].team == board[y][x].team:
-                        continue
-                    if self.old_board[y][x]:
-                        self.canvas.delete(self.pawns[y][x])
-                    image = self.white_pawn if board[y][x].team == Team.WHITE else self.black_pawn
-                    
-                    self.pawns[y][x] = self.canvas.create_image(
-                        x * self.square_size,
-                        (self.board_size - y) * self.square_size,
-                        image=image,
-                        tags="pawn",
-                        anchor=tkinter.SW
-                    )
+                    if not(self.old_board[y][x] and self.old_board[y][x].team == board[y][x].team):
+                        if self.old_board[y][x]:
+                            self.canvas.delete(self.pawns[y][x])
+                        image = self.white_pawn if board[y][x].team == Team.WHITE else self.black_pawn
+
+                        img_x, img_y = self.get_pos(x, y)
+                        self.pawns[y][x] = self.canvas.create_image(
+                            img_x,
+                            img_y,
+                            image=image,
+                            tags="pawn",
+                            anchor=tkinter.SW
+                        )
                 elif self.pawns[y][x]:
                     self.canvas.delete(self.pawns[y][x])
+                
+                if board[y][x] and board[y][x].id in old_robot_positions:
+                    old_x, old_y = old_robot_positions[board[y][x].id]
+                    old_x, old_y = self.get_pos(old_x+0.5, old_y+0.5)
+                    new_x, new_y = self.get_pos(x+0.5, y+0.5)
+                    
+                    self.canvas.create_line(
+                        old_x,
+                        old_y,
+                        new_x,
+                        new_y,
+                        fill="blue" if board[y][x].team == Team.WHITE else "red",
+                        width=7,
+                        tags="line"
+                    )
+                
                     
         self.old_board = board
 
@@ -174,8 +200,10 @@ class FancyViewer(tkinter.Tk):
         self.black_pawns.set(black_pawns)
 
     def update_index(self, _=None):
+        old_index = self.index
         self.index = int(self.turn_slider.get())
-        self.update()
+        if old_index != self.index:
+            self.update()
 
     def update_speed(self, _=None):
         diff = math.log(self.max_delay / self.min_delay)
@@ -183,6 +211,7 @@ class FancyViewer(tkinter.Tk):
         self.delay = self.max_delay / math.pow(math.e, val)
         
     def update(self):
+        self.clear_lines()
         self.view()
         self.update_pawns()
         self.turn_slider.set(self.index)

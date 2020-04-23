@@ -23,7 +23,18 @@ def parse_board(board):
         return Robot(team, id)
     
     def parse_row(row):
-        return [parse_piece(row[i:i + 7]) for i in range(0, len(row), 7)]
+        pieces = []
+        for c in row:
+            if c == "[":
+                pieces.append([None, ""])
+            elif c in ("B", "W"):
+                pieces[-1][0] = Team.WHITE if c == "W" else Team.BLACK
+            elif c in "0123456789":
+                pieces[-1][1] += c
+            elif c == "]":
+                pieces[-1][1] = int(pieces[-1][1]) if pieces[-1][1] else None
+        
+        return [Robot(team, id) if team else None for team, id in pieces]
     
     return [parse_row(row) for row in rows]
 
