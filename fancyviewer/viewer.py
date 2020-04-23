@@ -55,7 +55,7 @@ class FancyViewer(tkinter.Tk):
         black_label.pack(side=tkinter.LEFT)
         black_frame.pack(side=tkinter.LEFT, padx=20)
 
-        pause_button = tkinter.Button(stats_frame, text="Pause")
+        pause_button = tkinter.Button(stats_frame, text="Pause", command=self.pause)
         pause_button.pack(side=tkinter.LEFT, padx=20)
         self.speed_slider = tkinter.Scale(stats_frame, from_=0, to=100, orient=tkinter.HORIZONTAL, label="Speed", length=self.window_size - 2*self.square_size - 250, command=self.update_speed)
         self.speed_slider.pack(side=tkinter.LEFT, padx=0)
@@ -96,6 +96,7 @@ class FancyViewer(tkinter.Tk):
         
     def play(self, delay=0.5):
         self.delay = delay
+        self.speed_slider.set(100 * math.log(self.delay / self.max_delay) / math.log(self.min_delay / self.max_delay))
         self.index = -1
         self.paused = False
         self.after(100, self.run)
