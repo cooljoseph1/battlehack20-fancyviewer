@@ -20,7 +20,7 @@ setup(name='battlehack20-fancyviewer',
           ('Documentation', 'https://github.com/cooljoseph1/battlehack20-fancyviewer')
       )),
       install_requires=[
-            'pillow==7.0.0'
+            'pillow==8.2.0'
       ],
       python_requires='>=3, <3.8',
       zip_safe=False,
